@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn import cross_validation
-from sknn.mlp import Classifier, Layer
+from sklearn.ensemble import GradientBoostingClassifier
 
 # load the data
 print('Loading data...')
@@ -50,13 +50,6 @@ for i in range(1, projects_categorial_values.shape[1]):
 projects_data = projects_data.astype(float)
 print('projects_data shape after label encoding', projects_data.shape)
 
-# One hot encoding
-print('One-hot encoding...')
-enc = OneHotEncoder()
-enc.fit(projects_data)
-projects_data = enc.transform(projects_data)
-print('projects_data shape after one hot encoding', projects_data.shape)
-
 #Predicting
 xTr = projects_data[train_idx]
 yTr = np.array(outcomes.is_exciting)
@@ -65,18 +58,10 @@ xTe = projects_data[test_idx]
 print('Splitting training set into training and validation sets...')
 xTrain, xVal, yTrain, yVal = cross_validation.train_test_split(xTr, yTr, test_size=0.2, random_state=42)
 
-# don't do this
-# use gradient boosting models
-print('Training neural network...')
-nn = Classifier(
-    layers=[
-        Layer("Rectifier", units=100),
-        Layer("Softmax")],
-    learning_rate=0.02,
-    n_iter=10)
-nn.fit(xTrain, yTrain)
-
-score = nn.score(xVal, yVal)
+print('Training gradient boosting classifier...')
+clf = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=3, random_state=0)
+clf.fit(xTrain, yTrain)
+score = clf.score(xVal, yVal)       
 
 print ('Model accuracy', score)
 
