@@ -1,0 +1,22 @@
+1. Gradient Boosting Model (94.018773076136453 %)
+  Number of estimators: 100
+  Max depth of estimator: 3
+  Learning rate: 1.0
+
+  Feature selection:
+    Description:
+      Use the 25 categorical features found in projects.csv with LabelEncoder
+
+    Reasoning:
+      Just to test if things work
+
+  Training/Validation split:
+    Description:
+      Training data before 2014
+      Did not omit data before April 2010 unlike top submissions
+      Select validation set randomly from training data with 70/30 training/validation split
+
+    Reasoning:
+      70/30 split seems to be a commonly used ratio
+      Random sampling usually the best
+      But since we have time data, perhaps we should consider using more recent data for validation
