@@ -16,6 +16,8 @@
         - Source: http://blog.dato.com/using-gradient-boosted-trees-to-predict-bike-sharing-demand
 
       Some of our categories are quite sparse, so we should generate statistics (frequency?) for the categorical features
+        - Source: https://www.kaggle.com/c/caterpillar-tube-pricing/forums/t/15748/strategies-to-encode-categorical-variables-with-many-categories
+
       Look up shruken averages (apparently prevents overfitting)
         - Source: https://github.com/rkirana/kdd2014/blob/master/KDDWinningSubmission.pdf
 
@@ -31,3 +33,24 @@
      
     Future: 
       Since we have data ordered by time, perhaps we should consider using more recent data for validation?
+
+2. Gradient Boosted Machine (94.086588660803672 %)
+  Number of estimators: 100
+  Max depth of estimator: 7
+  Learning rate: 0.01
+  Max number of features to split on: 11
+
+  Feature selection:
+    Description:
+      Use the 25 categorical features found in projects.csv
+      Binarized by replacing the categories with their frequencies
+
+    Reasoning:
+      See above future changes
+
+    Future:
+      Look up shruken averages (apparently prevents overfitting)
+        - Source: https://github.com/rkirana/kdd2014/blob/master/KDDWinningSubmission.pdf
+
+  Training/Validation split:
+    Same as above
