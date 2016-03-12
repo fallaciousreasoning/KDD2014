@@ -1,14 +1,23 @@
-1. Gradient Boosting Model (94.018773076136453 %)
+1. Gradient Boosted Machine (94.018773076136453 %)
   Number of estimators: 100
   Max depth of estimator: 3
   Learning rate: 1.0
 
   Feature selection:
     Description:
-      Use the 25 categorical features found in projects.csv with LabelEncoder
-
+      Use the 25 categorical features found in projects.csv binarized with LabelEncoder
+      
     Reasoning:
       Just to test if things work
+      Don't need to use one-hot encoding since we're using decision trees
+
+    Future:
+      "Different kinds of models have different advantages. The boosted trees model is very good at handling tabular data with numerical features, or categorical features with fewer than hundreds of categories. One important note is that tree based models are not designed to work with very sparse features. When dealing with sparse input data (e.g. categorical features with large dimension), we can either pre-process the sparse features to generate numerical statistics, or switch to a linear model, which is better suited for such scenarios."
+        - Source: http://blog.dato.com/using-gradient-boosted-trees-to-predict-bike-sharing-demand
+
+      Some of our categories are quite sparse, so we should generate statistics (frequency?) for the categorical features
+      Look up shruken averages (apparently prevents overfitting)
+        - Source: https://github.com/rkirana/kdd2014/blob/master/KDDWinningSubmission.pdf
 
   Training/Validation split:
     Description:
@@ -19,4 +28,6 @@
     Reasoning:
       70/30 split seems to be a commonly used ratio
       Random sampling usually the best
-      But since we have time data, perhaps we should consider using more recent data for validation
+     
+    Future: 
+      Since we have data ordered by time, perhaps we should consider using more recent data for validation?
