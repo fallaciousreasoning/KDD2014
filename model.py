@@ -49,7 +49,7 @@ print('Label encoding...')
 # encode each categorical column
 # replace each label with its frequency across training and testing data
 for key in projects_categorial_columns:
-    projects_categorial_values[key] = df.groupby(key)[key].transform('count')
+  projects_categorial_values[key] = df.groupby(key)[key].transform('count')
 
 projects_data = np.array(projects_categorial_values)
 

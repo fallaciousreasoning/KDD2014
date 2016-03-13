@@ -1,0 +1,27 @@
+projects_categorical_data
+  projectid date_posted x1 x2 .. x25
+
+historical_data
+  projectid y1 y2 .. y5
+  - is_exciting rate for teachers
+  - is_exciting rate for school_district
+  - historical average donation amount for teacher
+  - historical average donation amount for school
+  - total number of donations for teacher
+  - total number of donations for 
+  - historical average donation amount for subject
+  - historical average donation amount for grade level
+
+
+text_data
+projectid z1 z2 .. z10
+  - percentage of spelling mistakes
+  -
+
+
+classifier
+  merge on projectid and with outcomes 
+  projectid date_posted x1 .. x25 y1 .. y5 z1 .. z10 is_exicting
+  split based on date_posted
+  train classifier
+
