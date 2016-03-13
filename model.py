@@ -22,7 +22,7 @@ print('Splitting data...')
 # split the training data and testing data
 
 dates = np.array(projects_df.date_posted)
-out_idx = np.where(dates < '2010-04-01')[0]
+# out_idx = np.where(dates < '2010-04-01')[0]
 train_idx = np.where(dates < '2014-01-01')[0]
 
 # disregard data before April 2010
@@ -56,6 +56,7 @@ projects_data = np.array(projects_categorial_values)
 #Predicting
 xTr = projects_data[train_idx]
 yTr = np.array(df.is_exciting[train_idx])
+
 xTe = projects_data[test_idx]
 
 print('Splitting training set into training and validation sets...')
