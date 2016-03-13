@@ -18,7 +18,6 @@ projectid z1 z2 .. z10
   - percentage of spelling mistakes
   -
 
-
 classifier
   merge on projectid and with outcomes 
   projectid date_posted x1 .. x25 y1 .. y5 z1 .. z10 is_exicting
