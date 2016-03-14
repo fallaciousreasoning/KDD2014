@@ -1,8 +1,7 @@
-projects_categorical_data
-  projectid date_posted x1 x2 .. x25
+categorical_features
+  - 25 categorical features in project.csv
 
-historical_data
-  projectid y1 y2 .. y5
+historical_features
   - is_exciting rate for teachers
   - is_exciting rate for school_district
   - historical average donation amount for teacher
@@ -12,15 +11,14 @@ historical_data
   - historical average donation amount for subject
   - historical average donation amount for grade level
 
-
-text_data
-projectid z1 z2 .. z10
-  - percentage of spelling mistakes
-  -
+text_features
+  - percentage of spelling mistakes?
+  - parts of speech variables
+  - term document matrix approach
+  - term frequency / inverse term document frequency
 
 classifier
-  merge on projectid and with outcomes 
-  projectid date_posted x1 .. x25 y1 .. y5 z1 .. z10 is_exicting
-  split based on date_posted
-  train classifier
+  - merge categorical_features, historical_features, text_features, outcomes on projectid
+  - split based on date_posted
+  - train GBM
 
