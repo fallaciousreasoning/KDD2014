@@ -59,8 +59,8 @@ def add_or_update(data, row, keymap):
 
 # load the data
 print('Loading data...')
-projects_df = pd.read_csv('projects_small.csv')
-donations_df = pd.read_csv('donations_small.csv',encoding='ISO-8859-1')
+projects_df = pd.read_csv('projects.csv')
+donations_df = pd.read_csv('donations.csv',encoding='ISO-8859-1')
 
 # Combine join projects and donations on project id
 print('Thinking about what I need...')
