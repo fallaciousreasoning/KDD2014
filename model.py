@@ -8,10 +8,11 @@ from sklearn.ensemble import GradientBoostingClassifier
 print('Loading data...')
 outcomes_df = pd.read_csv('outcomes.csv')
 categorical_df = pd.read_csv('categorical_features.csv')
+historical_df = pd.read_csv('historical_features.csv')
 
 print('Merging csv files...')
 # df is a left outer join of projects and outcomes on projectid
-df = pd.merge(categorical_df, outcomes_df, how='left', on='projectid')
+df = pd.merge(categorical_df, outcomes_df, how='left', on='projectid').merge(historical_df, how='left', on='projectid')
 
 print('Splitting data...')
 # split the training data and testing data
