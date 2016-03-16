@@ -77,4 +77,4 @@ wanted_columns = list(set(result_df.columns).difference(set(projects_df.columns)
 result_df = result_df[wanted_columns]
 
 print('Writing historical features to CSV...')
-result_df.to_csv('historical_features.csv')
+result_df.to_csv('historical_features.csv', index=False)
