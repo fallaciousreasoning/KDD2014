@@ -46,6 +46,7 @@ def append_matching_lines(from_file_name, match_file_name, match_column, output_
 
         with open(output_file, 'w') as output_file:
             match_line = match_file.readline()
+            line = 1
 
             while match_line is not None and match_line != '' and done < lines_count:
                 parts = match_line.split(',')
@@ -54,13 +55,14 @@ def append_matching_lines(from_file_name, match_file_name, match_column, output_
                     continue
 
                 found = lines_cached(parts[match_column], from_lines)
-                done += 1
 
-                output_file.write(found)
-
-                print(done/lines_count*100, "percent done!")
+                if found != "":
+                    done += 1
+                    output_file.write(found)
+                    print(done/lines_count*100, "percent done! (line", str(line) + ")")
 
                 match_line = match_file.readline()
+                line += 1
 
     print('done! (told you)')
 

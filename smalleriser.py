@@ -1,6 +1,6 @@
 """Just uses the first 300 rows for testing"""
 
-def smallerise(filename, lines_count = 1000):
+def smallerise(filename, lines_count = 6000):
 	lines = []
 	with open(filename, 'r', errors='ignore') as f:
 		for i in range(lines_count):
