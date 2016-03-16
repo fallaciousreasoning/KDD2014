@@ -10,10 +10,12 @@ projects_df = pd.read_csv('projects.csv')
 
 print 'Filling missing data...'
 # fill the missing data with previous observation data
-projects_df = projects_df.fillna(method='pad')
+projects_df = projects_df.fillna("")
+projects_df["month"] = projects_df["date_posted"].apply(lambda x: x.split("-")[1])
 
 #preprocessing the data based on different types of attributes
-projects_numeric_columns = ['school_latitude', 'school_longitude',
+projects_numeric_columns = ['school_latitude', 
+                            'school_longitude',
                             'fulfillment_labor_materials',
                             'total_price_excluding_optional_support',
                             'total_price_including_optional_support']
@@ -26,7 +28,7 @@ projects_categorial_values = projects_df[projects_categorial_columns]
 print 'Binarizing categorical values...'
 # replace each label with its frequency across training and testing data
 for key in projects_categorial_columns:
-  if key in ['projectid', 'date_posted']: 
+  if key in ['projectid', 'date_posted', 'students_reached']: 
     continue
   projects_categorial_values[key] = projects_df.groupby(key)[key].transform('count')
   print 'Binarized %s' % key

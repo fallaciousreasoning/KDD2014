@@ -1,4 +1,4 @@
-1. Gradient Boosted Machine (94.018773076136453 %)
+1. Gradient Boosted Machine
   Number of estimators: 100
   Max depth of estimator: 3
   Learning rate: 1.0
@@ -21,20 +21,7 @@
       Look up shruken averages (apparently prevents overfitting)
         - Source: https://github.com/rkirana/kdd2014/blob/master/KDDWinningSubmission.pdf
 
-  Training/Validation split:
-    Description:
-      Training data before 2014
-      Did not omit data before April 2010 unlike top submissions
-      Select validation set randomly from training data with 70/30 training/validation split
-
-    Reasoning:
-      70/30 split seems to be a commonly used ratio
-      Random sampling usually the best
-     
-    Future: 
-      Since we have data ordered by time, perhaps we should consider using more recent data for validation?
-
-2. Gradient Boosted Machine (94.086588660803672 %)
+2. Gradient Boosted Machine (89.028318 %)
   Number of estimators: 100
   Max depth of estimator: 7
   Learning rate: 0.01
@@ -42,9 +29,10 @@
 
   Feature selection:
     Description:
-      Use the 25 categorical features found in projects.csv
-      Binarized by replacing the categories with their frequencies
-
+      Use the 25 categorical features found in projects.csv binarized by replacing the categories with their frequencies
+      Use some constructed historical features
+      Use word counts of essay features
+      
     Reasoning:
       See above future changes
 
@@ -52,5 +40,26 @@
       Look up shruken averages (apparently prevents overfitting)
         - Source: https://github.com/rkirana/kdd2014/blob/master/KDDWinningSubmission.pdf
 
-  Training/Validation split:
-    Same as above
+3. Gradient Boosted Machine + Extra Trees (89.121976 %)
+  Number of estimators: 100
+  Max depth of estimator: 7
+  Learning rate: 0.01
+
+  Feature selection:
+    Description:
+      Use the 25 categorical features found in projects.csv binarized by replacing the categories with their frequencies
+      Use some constructed historical features
+      Use word counts of essay features
+      Use Extra Trees to select the best features
+
+4. Stochastic Gradient Descent Classifier (89.128068 %)
+  penalty="l2",loss="log",fit_intercept=True, shuffle=True,n_iter=50, alpha=0.000005
+
+  Feature selection:
+    Description:
+      TF-IDF vectors for the essays with a list of common English stopwords
+
+
+
+
+

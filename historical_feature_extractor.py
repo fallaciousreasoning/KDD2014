@@ -64,11 +64,17 @@ print('Loading data...')
 
 outcomes_df = pd.read_csv('outcomes.csv')
 projects_df = pd.read_csv('projects.csv')
+projects_df = projects_df.fillna(method='pad')
 donations_df = pd.read_csv('donations.csv',encoding='ISO-8859-1')
+
+print ('outcomes_df', outcomes_df.shape)
+print ('projects_df:', projects_df.shape)
+print ('donations_df:', donations_df.shape)
 
 # Combine join projects and donations on project id
 print('Thinking about what I need...')
 projects_donations_df = pd.merge(projects_df, donations_df, on='projectid').merge(outcomes_df, on='projectid');
+print ('projects_donations_df:', projects_donations_df.shape)
 
 print('Calculating clever things...')
 for row in projects_donations_df.itertuples():
@@ -102,6 +108,8 @@ result_df = result_df.merge(subjects_df, on='primary_focus_subject')
 result_df = result_df.merge(grades_df, on='grade_level')
 wanted_columns = list(set(result_df.columns).difference(set(projects_df.columns | outcomes_df.columns)).union({'projectid'}))
 result_df = result_df[wanted_columns]
+
+print ('result_df:', result_df.shape)
 
 print('Writing historical features to CSV...')
 result_df.to_csv('historical_features.csv', index=False)
