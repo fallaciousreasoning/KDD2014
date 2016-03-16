@@ -8,9 +8,15 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
+def add_or_update(dataFrame, row):
+
+	pass
+
 # load the data
 print('Loading data...')
 projects_df = pd.read_csv('projects_small.csv')
+
+donations_chunker = 
 donations_df = pd.read_csv('donations_small.csv')
 
 teachers_df = pd.DataFrame(columns=('teacher_acctid', 'teacher_exciting_projects', 'teacher_total_donations', 'teacher_donations_count', 'teacher_average_donation'))
@@ -20,11 +26,17 @@ grades_df = pd.DataFrame(columns=('grade_level', 'grade_exciting_projects', 'gra
 
 #Combine join projects and donations on project id
 print('Thinking about what I need...')
-projects_donations_df = projects_df.merge(donations_df, left_on='projectid', right_on='projectid');
-
+projects_donations_df = pd.merge(projects_df, donations_df, on='projectid');
+print(projects_donations_df)
 print('Calculating clever things...')
 for row in projects_donations_df.iterrows():
-	pass
+	amount = row.dollar_amount
+	print("Foo")
+
+	#If this donation if from the teacher associated with the project
+	if row.teacher_acctid == row.donor_acctid:
+		print("Foo")
+		pass
 
 #Put all the data together
 print('Putting data together...')

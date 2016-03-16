@@ -1,8 +1,8 @@
 """Just uses the first 300 rows for testing"""
 
-def smallerise(filename, lines_count = 300):
+def smallerise(filename, lines_count = 1000):
 	lines = []
-	with open(filename, 'r') as f:
+	with open(filename, 'r', errors='ignore') as f:
 		for i in range(lines_count):
 			try:
 				lines.append(f.readline())
