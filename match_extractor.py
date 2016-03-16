@@ -37,9 +37,12 @@ def append_matching_lines(from_file_name, match_file_name, match_column, output_
 
     done = 0
     with open(match_file_name, errors='ignore') as match_file:
+
+        print('Caching. Trust me. You won\'t regret it')
         from_lines = []
         with open(from_file_name) as from_file:
             from_lines = build_id_cache(from_file.readlines())
+        print('Done. Looking for matches')
 
         with open(output_file, 'w') as output_file:
             match_line = match_file.readline()
@@ -58,6 +61,8 @@ def append_matching_lines(from_file_name, match_file_name, match_column, output_
                 print(done/lines_count*100, "percent done!")
 
                 match_line = match_file.readline()
+
+    print('done! (told you)')
 
 
 append_matching_lines('projects.csv', 'donations.csv', 1, 'projects_small.csv')
