@@ -1,9 +1,4 @@
-#TODO
-"""
-	exciting projects/area
-	exciting projects/teacher
-"""
-
+print('Asking cleverer people for help...')
 import csv
 import pandas as pd
 import numpy as np
@@ -15,35 +10,31 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 # load the data
 print('Loading data...')
-
 projects_df = pd.read_csv('projects_small.csv')
 donations_df = pd.read_csv('donations_small.csv')
 
-project_information = dict()
+teachers_df = pd.DataFrame(columns=('teacher_acctid', 'teacher_exciting_projects', 'teacher_total_donations', 'teacher_donations_count', 'teacher_average_donation'))
+schools_df = pd.DataFrame(columns=('schoolid', 'school_exciting_projects', 'school_total_donations', 'school_donations_count', 'school_average_donation'))
+subjects_df = pd.DataFrame(columns=('primary_focus_subject', 'subject_exciting_projects', 'subject_total_donations', 'subject_donations_count', 'subject_average_donation'))
+grades_df = pd.DataFrame(columns=('grade_level', 'grade_exciting_projects', 'grade_total_donations', 'grade_donations_count', 'grade_average_donation'))
 
-teacher_totals = dict()
-teacher_donation_counts = dict()
-teacher_exciting_count = dict()
+#Combine join projects and donations on project id
+print('Thinking about what I need...')
+projects_donations_df = projects_df.merge(donations_df, left_on='projectid', right_on='projectid');
 
-area_totals = dict()
-area_exciting_count = dict()
-area_donation_counts = dict()
+print('Calculating clever things...')
+for row in projects_donations_df.iterrows():
+	pass
 
-for row in projects_df.itertuples()
+#Put all the data together
+print('Putting data together...')
+result_df = projects_df.merge(teachers_df, on='teacher_acctid')
+result_df = result_df.merge(schools_df, on='schoolid')
+result_df = result_df.merge(subjects_df, on='primary_focus_subject')
+result_df = result_df.merge(grades_df, on='grade_level')
+wanted_columns = list(set(result_df.columns).difference(set(projects_df.columns)).union(set(['projectid'])))
+print(wanted_columns)
+result_df = result_df[wanted_columns]
 
-for row in donations_df.itertuples():
-	if row.is_teacher_acct == 'f':
-		continue
-	
-	id = row.donor_acctid
-	#if we haven't seen the id, put it in the dictionary
-	if not id in teachers:
-		teachers.update({id: 0})
-
-	teachers[id] = teachers[id] + row.donation_total
-
-print(teachers)
-#Calculate information about teachers and projects
-teachers_and_projects = projects_df[['projectid', 'teacher_acctid']]
-
-#print(teachers_and_projects.groupby('teacher_acctid'))
+print('Writing historical features to CSV...')
+result_df.to_csv('historical_features.csv')
