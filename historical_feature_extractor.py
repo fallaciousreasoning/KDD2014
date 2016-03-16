@@ -23,6 +23,21 @@ def teacher_key_map(key):
     return default_key_map('teacher_', key)
 
 
+def school_key_map(key):
+    if key == 'id': return 'schoolid'
+    return default_key_map('school_', key)
+
+
+def subject_key_map(key):
+    if key == 'id': return 'primary_focus_subject'
+    return default_key_map('subject_', key)
+
+
+def grade_key_map(key):
+    if key == 'id': return 'grade_level'
+    return default_key_map('grade_', key)
+
+
 def build_entry(id, total, keymap):
     return {keymap('id'):id, keymap('total'):total, keymap('count'):1, keymap('average'):total}
 
@@ -60,19 +75,26 @@ for row in projects_donations_df.itertuples():
         entry = build_entry(row.teacher_acctid, amount, teacher_key_map)
         add_or_update(teachers_data, entry, teacher_key_map)
 
-teachers_df = pd.DataFrame(list(teachers_data.values()))
+    school_entry = build_entry(row.schoolid, amount, school_key_map)
+    add_or_update(schools_data, school_entry, school_key_map)
 
-schools_df = pd.DataFrame(columns=(
-    'schoolid', 'school_exciting_projects', 'school_total_donations', 'school_donations_count', 'school_average_donation'))
-subjects_df = pd.DataFrame(columns=(
-    'primary_focus_subject', 'subject_exciting_projects', 'subject_total_donations', 'subject_donations_count',
-    'subject_average_donation'))
-grades_df = pd.DataFrame(columns=(
-    'grade_level', 'grade_exciting_projects', 'grade_total_donations', 'grade_donations_count', 'grade_average_donation'))
+    subject_entry = build_entry(row.primary_focus_subject, amount, subject_key_map)
+    add_or_update(subjects_data, subject_entry, subject_key_map)
+
+    grade_entry = build_entry(row.grade_level, amount, grade_key_map)
+    add_or_update(grades_data, grade_entry, grade_key_map)
+
+teachers_df = pd.DataFrame(list(teachers_data.values()))
+schools_df = pd.DataFrame(list(schools_data.values()))
+subjects_df = pd.DataFrame(list(subjects_data.values()))
+grades_df = pd.DataFrame(list(grades_data.values()))
 
 # Put all the data together
 print('Putting data together...')
 result_df = projects_df.merge(teachers_df, on='teacher_acctid')
+result_df = result_df.merge(schools_df, on='schoolid')
+result_df = result_df.merge(subjects_df, on='primary_focus_subject')
+result_df = result_df.merge(grades_df, on='grade_level')
 wanted_columns = list(set(result_df.columns).difference(set(projects_df.columns)).union(set(['projectid'])))
 result_df = result_df[wanted_columns]
 
