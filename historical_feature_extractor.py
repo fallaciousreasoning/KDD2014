@@ -33,7 +33,6 @@ result_df = result_df.merge(schools_df, on='schoolid')
 result_df = result_df.merge(subjects_df, on='primary_focus_subject')
 result_df = result_df.merge(grades_df, on='grade_level')
 wanted_columns = list(set(result_df.columns).difference(set(projects_df.columns)).union(set(['projectid'])))
-print(wanted_columns)
 result_df = result_df[wanted_columns]
 
 print('Writing historical features to CSV...')
