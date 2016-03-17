@@ -14,10 +14,14 @@ categorical_df = pd.read_csv('categorical_features.csv')
 historical_df = pd.read_csv('historical_features.csv')
 essays_df = pd.read_csv('text_features.csv')
 
+sample = pd.read_csv('sampleSubmission.csv')
+sample = sample.sort_values(by='projectid')
+
 print('Merging csv files...')
 # df is a left outer join of projects and outcomes on projectid
 df = pd.merge(categorical_df, outcomes_df, how='left', on='projectid').merge(historical_df, how='left', on='projectid').merge(essays_df, how='left', on='projectid')
 df = df.fillna(0)
+df = df.sort_values(by='projectid')
 
 print('Splitting data...')
 # split the training data and testing data
@@ -91,9 +95,19 @@ clf = Pipeline([
 ])
 clf.fit(xTr, yTr)
 
-score = clf.score(xVal, yVal)       
+score = clf.score(xVal, yVal)
+
 
 print 'Model accuracy: %f' % (score*100)
 
+preds = clf.predict_proba(xTe)[:,1]
+
+#Save prediction into a file
+sample['is_exciting'] = preds
+
+print 'Saving predictions...'
+sample.to_csv('gbm_predictions.csv', index = False)
+
+# Score = 0.57613
 
 
