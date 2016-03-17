@@ -42,9 +42,13 @@ if __name__=="__main__":
   print 'Loading outcomes.csv...'
   outcomes_df = pd.read_csv('outcomes.csv')
 
+  sample = pd.read_csv('sampleSubmission.csv')
+  sample = sample.sort_values(by='projectid')
+
   print 'Merging csv files...'
   # df is a left outer join of projects and outcomes on projectid
   df = projects_df.merge(essays_df, how='left', on='projectid').merge(outcomes_df, how='left', on='projectid')
+  df = df.sort_values(by='projectid')
 
   print('Splitting data...')
   # split the training data and testing data
@@ -77,6 +81,7 @@ if __name__=="__main__":
 
   xTr = vectorizer.fit_transform(xTr)
   xVal = vectorizer.transform(xVal)
+  xTe = vectorizer.transform(xTe)
 
   clf = SGDClassifier(penalty="l2",loss="log",fit_intercept=True, shuffle=True,n_iter=50, alpha=0.000005)
   print 'Fitting classifier...'
@@ -86,5 +91,13 @@ if __name__=="__main__":
   score = clf.score(xVal, yVal)    
 
   print 'Model accuracy: %f' % (score*100)
+
+  preds = clf.predict_proba(xTe)[:,1]
+
+  #Save prediction into a file
+  sample['is_exciting'] = preds
+
+  print 'Saving predictions...'
+  sample.to_csv('predictions.csv', index = False)
 
 
