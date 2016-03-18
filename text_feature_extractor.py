@@ -1,3 +1,4 @@
+#import the stuff we need
 import re
 import csv
 import pandas as pd
@@ -10,6 +11,7 @@ import numpy as np
 
 
 def clean(string):
+  """Cleans whitespace from a string"""
   string = re.sub(r"\\t", " ", string)   
   string = re.sub(r"\\n", " ", string)   
   string = re.sub(r"\\r", " ", string)   
