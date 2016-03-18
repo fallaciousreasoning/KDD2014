@@ -1,4 +1,6 @@
 print 'Asking cleverer people for help...'
+
+#import all the stuff we need
 import re
 import csv
 import pandas as pd
@@ -12,6 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 
 def clean(string):
+  """Removes whitespace from a string"""
   string = re.sub(r"\\t", " ", string)   
   string = re.sub(r"\\n", " ", string)   
   string = re.sub(r"\\r", " ", string)   
@@ -19,8 +22,10 @@ def clean(string):
   string = re.sub(r"\s{2,}", " ", string)
   return string.strip()
 
+#only do stuff if this is our entry point
 if __name__=="__main__":
   
+  #all the columns we use as features
   data_cols1 = ['month',
                 'title_wc', 'short_description_wc', 'need_statement_wc', 'essay_wc',
                 'subject_total',
@@ -64,7 +69,7 @@ if __name__=="__main__":
                 'school_zip',
                 'teacher_count',
                 'resource_type']
-
+  #a list of stopwords we use to filter text
   stopwords = ['a', 'about', 'above', 'across', 'after', 'afterwards', 'again', 'against', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'am', 'among', 'amongst', 'amoungst',
                 'amount', 'an', 'and', 'another', 'any', 'anyhow', 'anyone', 'anything', 'anyway', 'anywhere', 'are', 'around', 'as', 'at', 'back', 'be', 'became', 'because', 'become', 'becomes', 'becoming',
                 'been', 'before', 'beforehand', 'behind', 'being', 'below', 'beside', 'besides', 'between', 'beyond', 'bill', 'both', 'bottom', 'but', 'by', 'call', 'can', 'cannot', 'cant', 'co', 'computer',
@@ -106,10 +111,12 @@ if __name__=="__main__":
   sample = sample.sort_values(by='projectid')
 
   print('Merging csv files...')
+  #join categorical features, historical features and text features with outcomes
   df1 = pd.merge(categorical_df, outcomes_df, how='left', on='projectid').merge(historical_df, how='left', on='projectid').merge(text_df, how='left', on='projectid')
   df1 = df1.fillna(0)
   df1 = df1.sort_values(by='projectid')
 
+  #join essays and outcomes
   df2 = projects_df.merge(essays_df, how='left', on='projectid').merge(outcomes_df, how='left', on='projectid')
   df2 = df2.sort_values(by='projectid')
 
@@ -145,31 +152,40 @@ if __name__=="__main__":
   xTe2 = X2[test_idx]
 
   print 'Selecting features with extra trees and training gradient boosting classifier...'
+  #decide what features are most important and use those ones
   clf1 = Pipeline([
     ('feature_selection', SelectFromModel(ExtraTreesClassifier())),
     ('classification', GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=7, max_features=11))
   ])
 
+  #train the model
   clf1.fit(xTr1, yTr1)
 
+  #make some predictions
   preds1 = clf1.predict_proba(xTe1)[:,1]
 
   print 'Generating TF-IDF vectors...'
   vectorizer = TfidfVectorizer(min_df=2, analyzer='word', stop_words=stopwords, sublinear_tf=True, ngram_range=(1,2), norm='l2', token_pattern=r"(?u)\b[A-Za-z0-9()\'\-?!\"%]+\b")
 
+  #train the text model
   xTr2 = vectorizer.fit_transform(xTr2)
   xTe2 = vectorizer.transform(xTe2)
 
   print 'Fitting SGD classifier...'
+  #train another model for a limited number of iterations on the text data
   clf2 = SGDClassifier(penalty="l2",loss="log",fit_intercept=True, shuffle=True,n_iter=50, alpha=0.000005)
   clf2.fit(xTr2, yTr2)
 
+  #get some predictions with this model
   preds2 = clf2.predict_proba(xTe2)[:,1]
 
+  #take a weighted average of the predictions of the two models
+  #this is arbitrary but based on model classification performance
   preds = (2*preds1 + 1*preds2)/3
 
+  #update our results
   sample['is_exciting'] = preds
-
+  #save our results
   sample.to_csv('ensemble_predictions.csv', index = False)
 
   #score = 0.59085
