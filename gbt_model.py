@@ -1,3 +1,5 @@
+"""Not used in final submission"""
+
 print('Asking cleverer people for help...')
 
 #import the stuff we need

@@ -1,3 +1,4 @@
+#import the stuff we need
 import re
 import csv
 import pandas as pd
@@ -6,6 +7,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 
 def clean(string):
+  """Cleans whitespace form a string"""
   string = re.sub(r"\\t", " ", string)   
   string = re.sub(r"\\n", " ", string)   
   string = re.sub(r"\\r", " ", string)   
@@ -14,7 +16,7 @@ def clean(string):
   return string.strip()
 
 if __name__=="__main__":   
-
+  #stopwords for the essays. Acquired from google.
   stopwords = ['a', 'about', 'above', 'across', 'after', 'afterwards', 'again', 'against', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'am', 'among', 'amongst', 'amoungst',
                 'amount', 'an', 'and', 'another', 'any', 'anyhow', 'anyone', 'anything', 'anyway', 'anywhere', 'are', 'around', 'as', 'at', 'back', 'be', 'became', 'because', 'become', 'becomes', 'becoming',
                 'been', 'before', 'beforehand', 'behind', 'being', 'below', 'beside', 'besides', 'between', 'beyond', 'bill', 'both', 'bottom', 'but', 'by', 'call', 'can', 'cannot', 'cant', 'co', 'computer',
@@ -79,6 +81,7 @@ if __name__=="__main__":
   print 'Generating TF-IDF matrix...'
   vectorizer = TfidfVectorizer(min_df=2, analyzer='word', stop_words=stopwords, sublinear_tf=True, ngram_range=(1,2), norm='l2', token_pattern=r"(?u)\b[A-Za-z0-9()\'\-?!\"%]+\b")
 
+  #train our classifier
   xTr = vectorizer.fit_transform(xTr)
   xVal = vectorizer.transform(xVal)
   xTe = vectorizer.transform(xTe)
