@@ -1,4 +1,6 @@
 print('Asking cleverer people for help...')
+
+#import the stuff we need
 import csv
 import pandas as pd
 import numpy as np
@@ -31,10 +33,11 @@ train_idx = np.where(dates < '2013-01-01')[0]
 val_idx = np.where(dates < '2014-01-01')[0]
 val_idx = np.setdiff1d(val_idx, train_idx)
 
-# disregard data before April 2010
+# disregard data before April 2010, data before here is weird and not helpful
 out_idx = np.where(dates < '2010-04-01')[0]
 train_idx = np.setdiff1d(train_idx, out_idx)
 
+#list of the columns we want.
 data_cols = ['month',
               'title_wc', 'short_description_wc', 'need_statement_wc', 'essay_wc',
               'subject_total',
@@ -89,22 +92,28 @@ yVal = y[val_idx]
 xTe = X[test_idx]
 
 print 'Selecting features with extra trees and training gradient boosting classifier...'
+#work out what features are most important
 clf = Pipeline([
   ('feature_selection', SelectFromModel(ExtraTreesClassifier())),
   ('classification', GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=7, max_features=11))
 ])
+
+#train the classifier
 clf.fit(xTr, yTr)
 
+#rate the classifier
 score = clf.score(xVal, yVal)
 
 
 print 'Model accuracy: %f' % (score*100)
 
+#make some predictions
 preds = clf.predict_proba(xTe)[:,1]
 
 #Save prediction into a file
 sample['is_exciting'] = preds
 
+#save the predictions
 print 'Saving predictions...'
 sample.to_csv('gbm_predictions.csv', index = False)
 
