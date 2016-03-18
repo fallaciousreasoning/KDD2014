@@ -59,6 +59,8 @@
     Description:
       TF-IDF vectors for the essays with a list of common English stopwords
 
+5. Ensemble of the above two classifiers
+
 
 
 
