@@ -1,4 +1,6 @@
 print('Asking cleverer people for help...')
+
+#import the stuff we need
 import csv
 import pandas as pd
 import numpy as np
@@ -8,6 +10,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
+#make some dictionaries for storing the data we pull out of the csvs
 teachers_data = dict()
 schools_data = dict()
 subjects_data= dict()
@@ -15,34 +18,41 @@ grades_data = dict()
 
 
 def default_key_map(prefix, key):
+    """Creates a key based on a prefix"""
     return prefix + key
 
 
 def teacher_key_map(key):
+    """Map of teacher keys"""
     if key == 'id': return 'teacher_acctid'
     return default_key_map('teacher_', key)
 
 
 def school_key_map(key):
+    """Map of school keys"""
     if key == 'id': return 'schoolid'
     return default_key_map('school_', key)
 
 
 def subject_key_map(key):
+    """Map of subject keys"""
     if key == 'id': return 'primary_focus_subject'
     return default_key_map('subject_', key)
 
 
 def grade_key_map(key):
+    """Map of grade keys"""
     if key == 'id': return 'grade_level'
     return default_key_map('grade_', key)
 
 
 def build_entry(id, exciting, total, keymap):
+    """builds an entry for one of the dictionaries based on a keymap"""
     return {keymap('id'):id, keymap('exciting'):(1 if exciting else 0), keymap('total'):total, keymap('count'):1, keymap('average'):total}
 
 
 def add_or_update(data, row, keymap):
+    """Adds or updates a row in the dictionary based on whether the id field of the row exists"""
     id = keymap('id')
     exciting = keymap('exciting')
     average = keymap('average')
@@ -73,10 +83,13 @@ print ('donations_df:', donations_df.shape)
 
 # Combine join projects and donations on project id
 print('Thinking about what I need...')
+#merge the csv files we are getting predictions from based on the relevant ids
 projects_donations_df = pd.merge(projects_df, donations_df, on='projectid').merge(outcomes_df, on='projectid');
 print ('projects_donations_df:', projects_donations_df.shape)
 
 print('Calculating clever things...')
+
+#loop through all the rows and extract the information we need
 for row in projects_donations_df.itertuples():
     amount = row.donation_total
     exciting = row.is_exciting
@@ -95,6 +108,7 @@ for row in projects_donations_df.itertuples():
     grade_entry = build_entry(row.grade_level, exciting, amount, grade_key_map)
     add_or_update(grades_data, grade_entry, grade_key_map)
 
+#create dataframes from the info we extracted
 teachers_df = pd.DataFrame(list(teachers_data.values()))
 schools_df = pd.DataFrame(list(schools_data.values()))
 subjects_df = pd.DataFrame(list(subjects_data.values()))
