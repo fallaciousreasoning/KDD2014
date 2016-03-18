@@ -1,4 +1,5 @@
 def lines(match, file_name):
+    """Gets all the lines from a file that contain 'match'"""
     matches = []
     with open(file_name, errors='ignore') as f:
         line = f.readline()
@@ -14,6 +15,7 @@ def lines(match, file_name):
     return matches
 
 def lines_cached(match, cache):
+    """Gets a line that contains 'match' from the cache and removes it"""
     if match in cache:
         #we only want one of each line, at most
         return cache.pop(match)
@@ -21,6 +23,7 @@ def lines_cached(match, cache):
     return ""
 
 def build_id_cache(lines):
+    """Builds an index of id to line"""
     cache = dict()
 
     for line in lines:
